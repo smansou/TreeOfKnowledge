@@ -1,0 +1,13 @@
+---
+description: shadcn ui components
+alwaysApply: false
+---
+Usage rules:
+When asked to use or generate shadcn/ui components, use the shadcn-ui MCP server.
+PLanning rules:
+When asked to plan using shadcn/ui components:
+Use the shadcn-ui MCP server during planning.
+Apply components wherever components are applicable.
+Use whole blocks where possible (Login page, Calendar, etc.)
+Implementations rules:
+When implementing, first call the demo tool to see the usage, then implement so that the code is correct.
