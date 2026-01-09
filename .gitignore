@@ -43,3 +43,6 @@ ENV_TEMPLATE.md
 next-env.d.ts
 
 certificates
+
+public/sw.js
+public/workbox-*.js
