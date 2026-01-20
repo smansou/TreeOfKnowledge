@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,28 +15,55 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AuthPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { login, signup, isLoading, error, clearError, isAuthenticated } =
+    useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // TODO: Implement mock login logic
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log("Login attempted");
-    }, 1000);
+    clearError();
+
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const result = await login({ email, password });
+    if (result.success) {
+      router.push("/dashboard");
+    }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // TODO: Implement mock signup logic
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log("Signup attempted");
-    }, 1000);
+    clearError();
+
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+
+    if (password !== confirmPassword) {
+      // Handle password mismatch
+      return;
+    }
+
+    const result = await signup({ name, email, password });
+    if (result.success) {
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -56,6 +84,12 @@ export default function AuthPage() {
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
 
+          {error && (
+            <div className="mt-4 rounded-md bg-red-50 p-4">
+              <div className="text-sm text-red-700">{error}</div>
+            </div>
+          )}
+
           <TabsContent value="login">
             <Card>
               <CardHeader>
@@ -71,6 +105,7 @@ export default function AuthPage() {
                       <Label htmlFor="login-email">Email</Label>
                       <Input
                         id="login-email"
+                        name="email"
                         type="email"
                         placeholder="m@example.com"
                         required
@@ -89,6 +124,7 @@ export default function AuthPage() {
                       </div>
                       <Input
                         id="login-password"
+                        name="password"
                         type="password"
                         required
                         disabled={isLoading}
@@ -161,6 +197,7 @@ export default function AuthPage() {
                       <Label htmlFor="signup-name">Full Name</Label>
                       <Input
                         id="signup-name"
+                        name="name"
                         type="text"
                         placeholder="John Doe"
                         required
@@ -171,6 +208,7 @@ export default function AuthPage() {
                       <Label htmlFor="signup-email">Email</Label>
                       <Input
                         id="signup-email"
+                        name="email"
                         type="email"
                         placeholder="m@example.com"
                         required
@@ -181,6 +219,7 @@ export default function AuthPage() {
                       <Label htmlFor="signup-password">Password</Label>
                       <Input
                         id="signup-password"
+                        name="password"
                         type="password"
                         placeholder="Create a strong password"
                         required
@@ -193,6 +232,7 @@ export default function AuthPage() {
                       </Label>
                       <Input
                         id="signup-confirm-password"
+                        name="confirmPassword"
                         type="password"
                         placeholder="Confirm your password"
                         required
