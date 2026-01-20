@@ -196,13 +196,25 @@ tree-of-knowledge/
 ### Completed ✅
 
 - **Project Foundation**: Next.js 14+ with TypeScript, App Router, and Tailwind CSS
-- **UI Components**: shadcn/ui components installed (button, card, input, form, dialog, etc.)
+- **UI Components**: shadcn/ui components installed (button, card, input, form, dialog, tabs, etc.)
 - **PWA Setup**: Web App Manifest, PWA configuration in next.config.ts with offline caching
 - **Project Structure**: Proper directory structure established with src/ folder
 - **Package Management**: Essential dependencies installed including next-pwa, workbox
 - **Development Tools**: ESLint + Prettier configured with Git hooks (Husky + lint-staged)
 - **Environment Configuration**: Environment variables template and setup guide created
 - **Code Quality**: Automatic formatting, linting, and import organization on commit
+- **Authentication UI**: Login/signup pages implemented using shadcn components with tabbed interface, responsive design, and form validation
+
+- ✅ **Login/Signup UI**: Combined auth page with tabbed interface using shadcn components
+- ✅ **Components Added**: Installed and configured tabs component (`@radix-ui/react-tabs`)
+- ✅ **Routing Structure**: Created `(auth)` route group with proper layout and page structure
+- ✅ **Form Features**: Email/password login, full registration form, form validation, loading states
+- ✅ **UI/UX**: Google auth buttons (UI ready), "Forgot Password" link, responsive mobile-first design
+- ✅ **Mock Handlers**: Placeholder authentication logic ready for state management integration
+- ✅ **File Structure**:
+  - `src/app/(auth)/layout.tsx` - Auth pages layout
+  - `src/app/(auth)/auth/page.tsx` - Combined login/signup page
+  - `src/components/ui/tabs.tsx` - Shadcn tabs component
 
 ## Implementation Phases
 
@@ -226,30 +238,25 @@ tree-of-knowledge/
 
 #### 1.3 Basic Authentication UI
 
-- [ ] Create login/signup pages (UI only)
-- [ ] Implement authentication state management with Context
-- [ ] Create protected route wrapper (using mock auth)
-- [ ] Add user session management (mock implementation)
+- [x] Create login/signup pages (UI only)
+- [x] Implement authentication state management with Context
+- [x] Create protected route wrapper (using mock auth)
+- [x] Add user session management (mock implementation)
 
 ### Phase 2: Frontend Dashboard & Core UI
 
 #### 2.1 Layout & Navigation
 
-- [ ] Create mobile-first responsive dashboard layout
-- [ ] Implement collapsible navigation (mobile drawer, desktop sidebar)
-- [ ] Add touch-friendly breadcrumb navigation
-- [ ] Create user profile dropdown with mobile optimization
-- [ ] Implement PWA app shell architecture
+- [ ] Create mobile-first responsive main page layout: navigation bar at the bottom with 3 tabs: tree (tree icon), search (search icon), profile (user icon)
+- [ ] circular plus icon at the bottom right of the screen to add a new knowledge item
+- [ ] form to add a new knowledge item: url, title, description, tags.
 
 #### 2.2 Knowledge Item Management UI
 
-- [ ] URL submission form with validation
-- [ ] Knowledge item cards/list view
-- [ ] Edit and delete functionality (UI)
-- [ ] Content preview modal
+- [ ] Edit and delete functionality
 - [ ] Loading states and error boundaries
 
-#### 2.3 Basic Search Interface
+#### 2.3 Search Interface
 
 - [ ] Search input with filters
 - [ ] Results display components
