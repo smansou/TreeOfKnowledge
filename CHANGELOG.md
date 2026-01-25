@@ -7,4 +7,6 @@ All notable changes to this project.
 - Mock service worker + fixtures
 - Auth state + protected routes (mocked)
 - Knowledge tree (dagre)
+- Docs + CI
+- Learning-path generator (WIP)
 
