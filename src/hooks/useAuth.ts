@@ -11,6 +11,15 @@ interface AuthState {
   error: string | null;
 }
 
+// Mock user for development bypass
+const MOCK_DEV_USER: User = {
+  id: "dev-user-123",
+  email: "developer@example.com",
+  name: "Dev User",
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
 export function useAuth() {
   const [state, setState] = useState<AuthState>({
     user: null,
@@ -23,6 +32,24 @@ export function useAuth() {
   useEffect(() => {
     const loadUser = () => {
       try {
+        console.log(
+          "🚀 ~ loadUser ~ (process.env.NEXT_PUBLIC_BYPASS_AUTH:",
+          process.env.NEXT_PUBLIC_BYPASS_AUTH
+        );
+        // Development bypass - automatically log in mock user
+        if (process.env.NEXT_PUBLIC_BYPASS_AUTH === "true") {
+          console.log(
+            "🚀 Development mode: Bypassing authentication with mock user"
+          );
+          setState({
+            user: MOCK_DEV_USER,
+            isLoading: false,
+            isAuthenticated: true,
+            error: null,
+          });
+          return;
+        }
+
         const storedUser = localStorage.getItem("auth_user");
         if (storedUser) {
           const user = JSON.parse(storedUser);
@@ -139,19 +166,29 @@ export function useAuth() {
     setState((prev) => ({ ...prev, isLoading: true }));
 
     try {
+      // Don't actually logout in development bypass mode - just show a message
+      if (process.env.NEXT_PUBLIC_BYPASS_AUTH === "true") {
+        console.log("🚀 Development mode: Logout bypassed, staying logged in");
+        setState((prev) => ({ ...prev, isLoading: false }));
+        return;
+      }
+
       await fetch("/api/auth/logout", { method: "POST" });
     } catch (error) {
       console.warn("Logout request failed:", error);
     } finally {
-      // Clear user from localStorage
-      localStorage.removeItem("auth_user");
+      // Only clear in production or when bypass is disabled
+      if (process.env.NEXT_PUBLIC_BYPASS_AUTH !== "true") {
+        // Clear user from localStorage
+        localStorage.removeItem("auth_user");
 
-      setState({
-        user: null,
-        isLoading: false,
-        isAuthenticated: false,
-        error: null,
-      });
+        setState({
+          user: null,
+          isLoading: false,
+          isAuthenticated: false,
+          error: null,
+        });
+      }
     }
   }, []);
 
